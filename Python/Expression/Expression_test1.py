@@ -1,4 +1,6 @@
 import re
+import numpy as np
+import matplotlib.pyplot as plt
 
 # http://www.flowdas.com/thinkpython/08-strings/
 
@@ -21,28 +23,12 @@ def repeatExp (num):
 # ---------------------------------------------------------------------------------------
 
 # 제재를 당한 아이디들을 모두 가져옵니다.
-idArr = ['usb07fl','o377jja','bdi3p77', 'rlsns1h','y12655u','y12655u']
+idArr = ['usb07fl','o377jja','bdi3p77', 'rlsns1h','y12655u','usb07fl']
 emailArr = ['@textnow.me','@textnow.me','@textnow.me','@naver.com','@textnow.me','@textnow.me']
 
 cntryArr = ['88','88','88','82','88','88']
 phoneArr = ['01072341111','01033331111','01072341112','01072341113','01072341114','01072341119']
 regPathArr = ['11','11','11','11','11','11']
-
-# 이 값들을 어떻게 수치화 할 것인가? =====================================================
-# 이메일 전체 건수, 각 도메인별 건수, 그래서 최종 도메인별 랭킹에 따른 점수화
-# 국가번호 전체 건수, 각 국가번호별 건수, 그래서 최종 국가번호 랭킹에 따른 점수화
-# 이건 휴대폰 번호 반복되는 패턴을 찾아놔야함 > 랭킹화
-# 가입경로는 번호로 따져있으니까 이미, 이건 그냥 더합시다.
-
-
-
-
-
-# 도메인을 카운트하고 전체 몇건인지 확인해보자
-
-
-
-
 
 
 # -------------------------------------------------------------------------------------------
@@ -66,6 +52,57 @@ lowerExp = '[a-z]' # 소문자 정규식
 upperExp = '[A-Z]' # 대문자 정규식
 speExp = '([-_.@])' # 특수문자 정규식 (허용할 특수문자들을 넣읍시다.
 permitArr = '@|^|-|^|_|^|.'.split('|^|') #허용할 특수문자
+
+
+
+
+
+# 이 값들을 어떻게 수치화 할 것인가? =====================================================
+# 이메일 전체 건수, 각 도메인별 건수, 그래서 최종 도메인별 랭킹에 따른 점수화
+# 국가번호 전체 건수, 각 국가번호별 건수, 그래서 최종 국가번호 랭킹에 따른 점수화
+# 이건 휴대폰 번호 반복되는 패턴을 찾아놔야함 > 랭킹화
+# 가입경로는 번호로 따져있으니까 이미, 이건 그냥 더합시다.
+
+zzzzzzzzzzzzz = 'usb07fl'
+trASC = ''
+k = 0
+while len(zzzzzzzzzzzzz):
+    trASC = trASC + str(ord(zzzzzzzzzzzzz[k]))
+    k = k + 1
+    if(k == len(zzzzzzzzzzzzz)):
+        break
+
+ulen = 0
+
+print('===================================>>>>', chr(65))
+
+intStartCharNum = 0
+intEndCharNum = 2
+print('최종 :::',trASC) # usb07fl
+
+while len(trASC):
+
+    # 소문자 형식인지 확인
+    if (bool(re.match(lowerExp, chr(int(trASC[intStartCharNum:intEndCharNum]))))):
+        print('=====> [결과] ::',bool(re.match(lowerExp, chr(int(trASC[intStartCharNum:intEndCharNum])))),'소문자 성공 ::', chr(int(trASC[intStartCharNum:intEndCharNum])))
+        intStartCharNum = intEndCharNum
+        intEndCharNum = intStartCharNum + 2
+    elif (bool(re.match(numExp, chr(int(trASC[intStartCharNum:intEndCharNum]))))):
+        print('=====> [결과] ::', bool(re.match(lowerExp, chr(int(trASC[intStartCharNum:intEndCharNum])))), '숫자 성공 ::', chr(int(trASC[intStartCharNum:intEndCharNum])))
+        intStartCharNum = intEndCharNum
+        intEndCharNum = intStartCharNum + 2
+    else:
+        #print('[실패] intStartCharNum:',intStartCharNum,',intEndCharNum:',intEndCharNum)
+        intStartCharNum = intStartCharNum
+        intEndCharNum = intEndCharNum +1
+        if(intEndCharNum-intStartCharNum > 4):
+            intEndCharNum = intStartCharNum+3
+    ulen = ulen + 1
+    if(intEndCharNum == len(trASC)):
+        break
+print ('-------------------------------------------------------');
+
+# 도메인을 카운트하고 전체 몇건인지 확인해보자
 
 
 
@@ -114,7 +151,7 @@ print('★ 신규 문자열 :::::::::::::::::::::::::::::: 최종',newInputArr, 
 i = 0
 repeatStr = ''
 while (i < len(newInputArr)):
-    print('\n =====☞ newInputArr[',i,'] 문자열 ',newInputArr[i], '패턴 검색 시작! [',len(newInputArr[i]),'] 자리 ☜=====')
+    #print('\n =====☞ newInputArr[',i,'] 문자열 ',newInputArr[i], '패턴 검색 시작! [',len(newInputArr[i]),'] 자리 ☜=====')
     num = 1
     while (j < len(newInputArr[i])):
         # print ('현재 문자열 :',newInputArr[i][j], (i,j))
@@ -129,7 +166,7 @@ while (i < len(newInputArr)):
                 tmp_pattern[i] = tmp_pattern[i] + '[a-z]'+repeatExp(num)
                 num = 1
                 #j = j+1
-                print('최종 :'+tmp_pattern[i])
+                #print('최종 :'+tmp_pattern[i])
 
         # ============================================================ 대문자
         elif (bool(re.match(upperExp, newInputArr[i][j]))):
@@ -140,7 +177,7 @@ while (i < len(newInputArr)):
                 tmp_pattern[i] = tmp_pattern[i] + '[A-Z]'+repeatExp(num)
                 num = 1
                 #j = j+1
-                print('최종 :' + tmp_pattern[i])
+                #print('최종 :' + tmp_pattern[i])
 
         # ============================================================ 숫자
         elif (bool(re.match(numExp, newInputArr[i][j]))):
@@ -151,7 +188,7 @@ while (i < len(newInputArr)):
                 tmp_pattern[i] = tmp_pattern[i] + '[0-9]'+repeatExp(num)
                 num = 1
                 #j = j+1
-                print('최종 :' + tmp_pattern[i])
+                #print('최종 :' + tmp_pattern[i])
 
         # ============================================================ 특수문자
         elif (bool(re.match(speExp, newInputArr[i][j]))):
@@ -162,14 +199,13 @@ while (i < len(newInputArr)):
                 tmp_pattern[i] = tmp_pattern[i] + newInputArr[i][j]
                 num =1
                 #j = j+1
-                print('최종 :' + tmp_pattern[i])
+                #print('최종 :' + tmp_pattern[i])
 
         j = j+1
         if( j == len(newInputArr[i])):
             j = 0
             break
     i = i+1
-print ('-------------------------------------------------------');
 print('★최종', tmp_pattern)
 print ('-------------------------------------------------------');
 
@@ -187,6 +223,27 @@ print ('-------------------------------------------------------');
 print ('100001) 정규식 match 확인! input :[',inputArr[0],'] ==☞ result :', bool(re.match(tmp_pattern[0], inputArr[0])))
 print ('100001) 정규식 match 확인! input :[',inputArr[1],'] ==☞ result :', bool(re.match(tmp_pattern[1], inputArr[1])))
 print ('100001) 정규식 match 확인! input :[',inputArr[2],'] ==☞ result :', bool(re.match(tmp_pattern[2], inputArr[2])))
+
+
+# numpy를 이용한 3차원 텐서 만들기
+tensor_3d = np.array([[1,2], [3,4], [5,6], [7,8]])
+print (tensor_3d)
+
+number_of_points = 100
+x_point = []
+y_point = []
+
+a = 0.22
+b = 0.78
+for l in range(number_of_points):
+    x = np.random.normal(0.0, 0.5)
+    y = a*x +b+np.random.normal(0.0, 0.1)
+    x_point.append([x])
+    y_point.append([y])
+
+plt.plot(x_point, y_point, '0', label='Input data')
+plt.legend()
+plt.show()
 
 
 #학습결과 hdf5 파일로 결과 남기기

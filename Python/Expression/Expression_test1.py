@@ -1,6 +1,5 @@
 import re
 import numpy as np
-import matplotlib.pyplot as plt
 
 # http://www.flowdas.com/thinkpython/08-strings/
 
@@ -9,39 +8,30 @@ print ('848757) 정규식 match 확인 : ', bool(re.match('[a-c]{3}', 'aaa')))
 print ('-------------------------------------------------------');
 
 # 사용할 함수 정의 ---------------------------------------------------------
-
 # {} 반복할 숫자
 def repeatExp (num):
     num = str(num)
     val =  '{' + num + '}'
     return val
-
 # ---------------------------------------------------------------------- 파일 읽어들이기
-
 # mjk2072 82 01031332072 @naver.com 11
 
 # ---------------------------------------------------------------------------------------
-
 # 제재를 당한 아이디들을 모두 가져옵니다.
-idArr = ['usb07fl','o377jja','bdi3p77', 'rlsns1h','y12655u','usb07fl']
-emailArr = ['@textnow.me','@textnow.me','@textnow.me','@naver.com','@textnow.me','@textnow.me']
+idArr = ['re2sns1h','o377jja','bdi3p77', 'usb07fl','y12655u','usb07fl', 'mjk2072', 'mzseobi1658']
+emailArr = ['@textnow.me','@textnow.me','@textnow.me','@naver.com','@textnow.me','@textnow.me', 'naver.com','nate.com']
 
-cntryArr = ['88','88','88','82','88','88']
-phoneArr = ['01072341111','01033331111','01072341112','01072341113','01072341114','01072341119']
-regPathArr = ['11','11','11','11','11','11']
+cntryArr = ['88','88','88','82','88','88','82','82']
+phoneArr = ['01072341111','01033331111','01072341112','01072341113','01072341114','01072341119','01031332072','01031332072']
+regPathArr = ['11','11','11','11','11','11','10','10']
 
-
-# -------------------------------------------------------------------------------------------
-# 3204844.String 배열로 출력
+# ------------------------------------------------------------------------------------------- 3204844.String 배열로 출력
 inputArr = idArr
 print ('3204844) inputArr :', inputArr)
 print ('-------------------------------------------------------');
 
 # 특정 문자열을 기준으로 자르고 싶을 경우, String.split('|^|')을 사용하여 가능
 # 623154. inputArr에서의 n번째 String
-i = 0; #inputArr 개수
-j = 0; #inputArr[i]번째의 String 문자
-
 cLower = 'a' #소문자 형식
 cNum = '0' #숫자 형식
 cUpper = 'A' #대문자 형식
@@ -54,8 +44,8 @@ speExp = '([-_.@])' # 특수문자 정규식 (허용할 특수문자들을 넣�
 permitArr = '@|^|-|^|_|^|.'.split('|^|') #허용할 특수문자
 
 
-
-
+i = 0; #inputArr 개수
+j = 0; #inputArr[i]번째의 String 문자
 
 # 이 값들을 어떻게 수치화 할 것인가? =====================================================
 # 이메일 전체 건수, 각 도메인별 건수, 그래서 최종 도메인별 랭킹에 따른 점수화
@@ -63,44 +53,58 @@ permitArr = '@|^|-|^|_|^|.'.split('|^|') #허용할 특수문자
 # 이건 휴대폰 번호 반복되는 패턴을 찾아놔야함 > 랭킹화
 # 가입경로는 번호로 따져있으니까 이미, 이건 그냥 더합시다.
 
-zzzzzzzzzzzzz = 'usb07fl'
+#
+q = 0
+w = 0
+
+DecStr = ['']*len(idArr)
+EncStr = ['']*len(idArr)
+
+for userID in idArr:
+    for u in userID:
+        EncStr[q] = EncStr[q] + str(ord(u))
+        w = w+1
+    q = q+1
+#print('최종 :::',EncStr) # usb07fl
+
 trASC = ''
-k = 0
-while len(zzzzzzzzzzzzz):
-    trASC = trASC + str(ord(zzzzzzzzzzzzz[k]))
-    k = k + 1
-    if(k == len(zzzzzzzzzzzzz)):
-        break
-
-ulen = 0
-
-print('===================================>>>>', chr(65))
 
 intStartCharNum = 0
 intEndCharNum = 2
-print('최종 :::',trASC) # usb07fl
+intCount = 0
+for e in EncStr:
+    while len(e):
+        if(intEndCharNum > len(e)):
+            intStartCharNum = 0
+            intEndCharNum = 2
+            break
 
-while len(trASC):
-
-    # 소문자 형식인지 확인
-    if (bool(re.match(lowerExp, chr(int(trASC[intStartCharNum:intEndCharNum]))))):
-        print('=====> [결과] ::',bool(re.match(lowerExp, chr(int(trASC[intStartCharNum:intEndCharNum])))),'소문자 성공 ::', chr(int(trASC[intStartCharNum:intEndCharNum])))
-        intStartCharNum = intEndCharNum
-        intEndCharNum = intStartCharNum + 2
-    elif (bool(re.match(numExp, chr(int(trASC[intStartCharNum:intEndCharNum]))))):
-        print('=====> [결과] ::', bool(re.match(lowerExp, chr(int(trASC[intStartCharNum:intEndCharNum])))), '숫자 성공 ::', chr(int(trASC[intStartCharNum:intEndCharNum])))
-        intStartCharNum = intEndCharNum
-        intEndCharNum = intStartCharNum + 2
-    else:
-        #print('[실패] intStartCharNum:',intStartCharNum,',intEndCharNum:',intEndCharNum)
-        intStartCharNum = intStartCharNum
-        intEndCharNum = intEndCharNum +1
-        if(intEndCharNum-intStartCharNum > 4):
-            intEndCharNum = intStartCharNum+3
-    ulen = ulen + 1
-    if(intEndCharNum == len(trASC)):
-        break
+        # 소문자 형식인지 확인
+        #print('==>> 복호화 :', intStartCharNum, intEndCharNum, e[intStartCharNum:intEndCharNum], chr(int(e[intStartCharNum:intEndCharNum])))
+        if (bool(re.match(lowerExp, chr(int(e[intStartCharNum:intEndCharNum]))))):
+            #print('[결과] ::',bool(re.match(lowerExp, chr(int(e[intStartCharNum:intEndCharNum])))),'소문자 성공 ::', chr(int(e[intStartCharNum:intEndCharNum])))
+            DecStr[intCount] = DecStr[intCount] + chr(int(e[intStartCharNum:intEndCharNum]))
+            intStartCharNum = intEndCharNum
+            intEndCharNum = intStartCharNum + 2
+        # 숫자 형식인지 확인
+        elif (bool(re.match(numExp, chr(int(e[intStartCharNum:intEndCharNum]))))):
+            #print('[결과] ::', bool(re.match(lowerExp, chr(int(e[intStartCharNum:intEndCharNum])))), '숫자 성공 ::', chr(int(e[intStartCharNum:intEndCharNum])))
+            DecStr[intCount] = DecStr[intCount] + chr(int(e[intStartCharNum:intEndCharNum]))
+            intStartCharNum = intEndCharNum
+            intEndCharNum = intStartCharNum + 2
+        else:
+            intEndCharNum = intEndCharNum +1
+            if((intEndCharNum-intStartCharNum) > 4):
+                print('범위를 벗어났습니다.')
+                intEndCharNum = intStartCharNum+3
+    intCount = intCount+1
 print ('-------------------------------------------------------');
+print('원래 아이디 : ',idArr)
+print('복호화 최종 결과물 : ',DecStr)
+print('인코딩 최종 결과물 : ',EncStr)
+print ('-------------------------------------------------------');
+
+
 
 # 도메인을 카운트하고 전체 몇건인지 확인해보자
 
@@ -240,10 +244,5 @@ for l in range(number_of_points):
     y = a*x +b+np.random.normal(0.0, 0.1)
     x_point.append([x])
     y_point.append([y])
-
-plt.plot(x_point, y_point, '0', label='Input data')
-plt.legend()
-plt.show()
-
 
 #학습결과 hdf5 파일로 결과 남기기
